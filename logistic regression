@@ -1,0 +1,88 @@
+import pandas as pd
+df=pd.read_csv("C:/Users/anand/Desktop/framingham.csv")
+"""
+print(df.tail())
+print(df.columns)
+print(df.shape)
+
+print(df.isnull())
+"""
+#print(df.isnull().sum())
+#print(df["TenYearCHD"].value_counts())
+#print(df["TenYearCHD"].value_counts(normalize=True)*100)
+#print(df.info())
+
+#print(df.describe())
+
+
+df.fillna(df.median(numeric_only=True), inplace=True)
+
+#print(df.isnull().sum())
+
+X = df.drop("TenYearCHD", axis=1)
+y = df["TenYearCHD"]
+
+#print(X.shape)
+#print(y.shape)
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42
+)
+
+#print(X_train.shape)
+#print(X_test.shape)
+
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression(max_iter=1000)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print(y_pred[:10])
+
+from sklearn.metrics import accuracy_score
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Accuracy:", accuracy)
+
+from sklearn.metrics import confusion_matrix
+
+cm = confusion_matrix(y_test, y_pred)
+
+print(cm)
+
+from sklearn.metrics import classification_report
+
+print(classification_report(y_test, y_pred)) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
